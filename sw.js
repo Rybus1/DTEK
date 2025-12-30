@@ -1,10 +1,13 @@
-const CACHE_NAME = 'dtek-pwa-v1';
+// bump cache name to force refresh when icons/manifest changed
+const CACHE_NAME = 'dtek-pwa-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/manifest.json'
+  './',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 self.addEventListener('install', (evt) => {

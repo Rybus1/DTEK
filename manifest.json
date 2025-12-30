@@ -1,8 +1,8 @@
 {
   "name": "Графік відключень ДТЕК (pet)",
   "short_name": "DTEK",
-  "start_url": ".",
-  "scope": ".",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0b0f14",
   "theme_color": "#0b0f14",

@@ -540,7 +540,7 @@
       const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
       const isSecure = location.protocol === 'https:' || isLocalhost;
       if (isSecure) {
-        navigator.serviceWorker.register('/sw.js').then(() => {
+        navigator.serviceWorker.register('./sw.js').then(() => {
           console.log('Service worker registered');
         }).catch((err) => console.warn('SW registration failed', err));
       } else {

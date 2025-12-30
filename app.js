@@ -21,6 +21,7 @@
   const elViewToggle = document.getElementById("viewToggleBtn");
   const elMinimalToggle = document.getElementById("minimalToggleBtn");
   const elMinimalFloating = document.getElementById("minimalFloatingBtn");
+  const elInstallBtn = document.getElementById("installBtn");
 
   let lastData = null;
 
@@ -541,11 +542,36 @@
       }).catch((err) => console.warn('SW registration failed', err));
     }
 
-    // capture beforeinstallprompt to allow custom install UI (optional)
+    // capture beforeinstallprompt to allow custom install UI
     window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
       window.deferredInstallPrompt = e;
-      // The browser may show its own UI; we keep the event for potential custom prompts
       console.log('beforeinstallprompt captured');
+      if (elInstallBtn) elInstallBtn.hidden = false;
+    });
+
+    // click handler for install button
+    if (elInstallBtn) {
+      elInstallBtn.addEventListener('click', async () => {
+        const evt = window.deferredInstallPrompt;
+        if (!evt) return;
+        try {
+          evt.prompt();
+          const choice = await evt.userChoice;
+          console.log('userChoice', choice);
+          window.deferredInstallPrompt = null;
+          elInstallBtn.hidden = true;
+          localStorage.setItem('pet_dtek_install_prompted', '1');
+        } catch (err) {
+          console.warn('install prompt failed', err);
+        }
+      });
+    }
+
+    // when app is installed, hide the button
+    window.addEventListener('appinstalled', () => {
+      console.log('App installed');
+      if (elInstallBtn) elInstallBtn.hidden = true;
     });
 
     if (elViewToggle) {

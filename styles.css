@@ -9,6 +9,7 @@
   --unknown: #374151;
   --pill-text-dark: #0b0f14;
   --danger: #fbbf24;
+  --now: #38f8ff;
 }
 
 [data-theme="light"] {
@@ -22,6 +23,7 @@
   --unknown: #c0c5c9;
   --pill-text-dark: #1f1b16;
   --danger: #b45309;
+  --now: #38f8ff;
 }
 
 * { box-sizing: border-box }
@@ -191,6 +193,10 @@ button:hover { border-color: rgba(54, 80, 122, .9) }
 /* tiny segments: hide value */
 .segment[data-short="1"] .seg-value{display:none}
 
+/* Now indicator (vertical line + label) */
+.now-line{position:absolute;background:var(--now);z-index:6;border-radius:2px;box-shadow:0 0 8px rgba(0,0,0,0.35)}
+.now-indicator{position:absolute;z-index:7;font-size:12px;padding:4px 8px;border-radius:8px;background:var(--card);color:var(--text);border:2px solid var(--now);white-space:nowrap;bottom:-24px}
+
 .raw { margin-top: 12px }
 
 pre {
@@ -253,4 +259,6 @@ pre {
   .tl-bar{display:flex;flex-direction:column;min-height:400px;width:75px;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-left:72px}
   .segment{width:100%;height:var(--pct);display:flex;align-items:center;justify-content:center}
   .seg-value{font-size:14px}
+  .now-line{left:154px;right:auto;width:14px}
+  .now-indicator{left:165px}
 }

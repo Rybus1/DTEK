@@ -250,7 +250,7 @@
 
   // ===== Режим 2: горизонтальна лінія з підписами у точках змін =====
 
-  function renderTimelineLine(halfList) {
+  function renderTimelineLine(halfList, nowOrNull) {
     const wrap = document.createElement("div");
     wrap.className = "timeline-line";
 
@@ -327,6 +327,45 @@
       breaks.appendChild(lbl);
     }
 
+    // current-time indicator
+    if (nowOrNull) {
+      const nowIdx = nowOrNull.getHours() * 2 + (nowOrNull.getMinutes() >= 30 ? 1 : 0);
+      if (nowIdx >= 0 && nowIdx < 48) {
+        const posPct = (nowIdx / 48) * 100;
+        const isVertical = window.matchMedia && window.matchMedia('(max-width:720px)').matches;
+
+        const nowLine = document.createElement('div');
+        nowLine.className = 'now-line';
+        if (isVertical) {
+          nowLine.style.left = '154px';
+          nowLine.style.right = 'auto';
+          nowLine.style.top = posPct + '%';
+          nowLine.style.height = '2px';
+        } else {
+          nowLine.style.left = posPct + '%';
+          nowLine.style.top = '18px';
+          nowLine.style.bottom = '10px';
+          nowLine.style.width = '2px';
+        }
+
+        const nowLabel = document.createElement('div');
+        nowLabel.className = 'now-indicator';
+        // show current time at load (HH:MM)
+        nowLabel.textContent = `${pad2(nowOrNull.getHours())}:${pad2(nowOrNull.getMinutes())}`;
+        if (isVertical) {
+          nowLabel.style.left = '165px';
+          nowLabel.style.top = posPct + '%';
+          nowLabel.style.transform = 'translateY(-50%)';
+        } else {
+          nowLabel.style.left = posPct + '%';
+          nowLabel.style.transform = 'translateX(-50%)';
+        }
+
+        wrap.appendChild(nowLine);
+        wrap.appendChild(nowLabel);
+      }
+    }
+
     wrap.appendChild(breaks);
     wrap.appendChild(bar);
     return wrap;
@@ -354,12 +393,12 @@
 
     const view = getViewMode();
     const body = (view === "line")
-      ? renderTimelineLine(halfList)
+      ? renderTimelineLine(halfList, nowOrNull)
       : renderVerticalGrid(halfList);
 
     const info = document.createElement("div");
     info.className = "muted";
-    info.style.marginTop = "8px";
+    info.style.marginTop = "36px";
 
     const next = nowOrNull ? findNextChange(halfList, nowOrNull) : null;
     info.innerHTML = next

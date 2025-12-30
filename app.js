@@ -1,8 +1,6 @@
 (() => {
   const API_URL = "https://dtek-api.svitlo-proxy.workers.dev/";
 
-  console.log('Current version: 6');
-
   // localStorage ключі (збереження регіону/групи/RAW/теми/виду)
   const LS_REGION = "pet_dtek_region_cpu";
   const LS_QUEUE = "pet_dtek_queue";
@@ -590,7 +588,6 @@
       const isSecure = location.protocol === 'https:' || isLocalhost;
       if (isSecure) {
         navigator.serviceWorker.register('./sw.js').then(() => {
-          console.log('Service worker registered');
         }).catch((err) => console.warn('SW registration failed', err));
       } else {
         console.log('Service worker not registered: insecure origin', location.protocol, location.hostname);

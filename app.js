@@ -272,8 +272,8 @@
 
         // show duration inside if at least half-hour blocks >= 2 (>=1 hour)
         const blocks = i - start;
-          if (blocks <= 2) seg.dataset.short = "1"; // mark tiny segments
-          if (blocks >= 1) {
+        if (blocks <= 2) seg.dataset.short = "1"; // mark tiny segments
+        if (blocks >= 1) {
           const hours = (blocks / 2);
           const v = document.createElement("div");
           v.className = "seg-value";
@@ -546,4 +546,9 @@
 
   initUI();
   fetchData();
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+  }
+
 })();

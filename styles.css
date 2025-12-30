@@ -256,7 +256,7 @@ pre {
   .tl-breaks{position:absolute;left:8px;top:8px;bottom:8px;width:56px;height:auto;pointer-events:none}
   .breakpoint{position:absolute;left:0;font-size:12px;color:var(--muted);white-space:nowrap;transform:translateY(-50%)}
 
-  .tl-bar{display:flex;flex-direction:column;min-height:400px;width:75px;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-left:72px}
+  .tl-bar{display:flex;flex-direction:column;min-height:600px;width:75px;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-left:72px}
   .segment{width:100%;height:var(--pct);display:flex;align-items:center;justify-content:center}
   .seg-value{font-size:14px}
   /* now-line/indicator are positioned inside .tl-bar; no fixed offsets here */

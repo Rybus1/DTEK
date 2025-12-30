@@ -260,5 +260,5 @@ pre {
   .segment{width:100%;height:var(--pct);display:flex;align-items:center;justify-content:center}
   .seg-value{font-size:14px}
   .now-line{left:154px;right:auto;width:14px}
-  .now-indicator{left:165px}
+  .now-indicator{left:165px;bottom:auto}
 }

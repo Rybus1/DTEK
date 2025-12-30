@@ -26,6 +26,15 @@
 
   const pad2 = (n) => String(n).padStart(2, "0");
 
+  // simple debounce helper
+  function debounce(fn, wait = 120) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  }
+
   const UA = {
     loading: "Завантаження…",
     updated: "Оновлено",
@@ -516,6 +525,13 @@
         setMinimal(next);
         if (lastData) render(lastData);
       });
+    }
+
+    // re-render on resize to reposition breakpoints correctly (debounced)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', debounce(() => {
+        if (lastData) render(lastData);
+      }, 140));
     }
 
     if (elViewToggle) {

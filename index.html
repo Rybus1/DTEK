@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Графік відключень ДТЕК (pet)</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <div class="field field--grow">
+          <label for="regionSelect">Область</label>
+          <select id="regionSelect"></select>
+        </div>
+
+        <div class="field">
+          <label for="queueSelect">Група</label>
+          <select id="queueSelect"></select>
+        </div>
+
+        <div class="field">
+          <label>Дії</label>
+          <div class="row row--tight">
+            <button id="refreshBtn" type="button">Оновити</button>
+            <button id="viewToggleBtn" type="button" class="muted">📊 Лінія</button>
+            <button id="toggleRawBtn" type="button" class="muted">Показати JSON</button>
+            <button id="themeToggleBtn" type="button" class="muted">Світла тема</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row--between row--center mt">
+        <div class="legend">
+          <span><span class="dot on"></span>є світло</span>
+          <span><span class="dot off"></span>немає світла</span>
+          <span><span class="dot unknown"></span>невідомо</span>
+        </div>
+        <div id="statusLine" class="muted"></div>
+      </div>
+
+      <div id="timeline" class="timeline"></div>
+
+      <div id="rawWrap" class="raw" hidden>
+        <label>RAW API (розпарсено)</label>
+        <pre id="raw"></pre>
+      </div>
+
+      <div class="footer muted">
+        Джерело: dtek-api.svitlo-proxy.workers.dev
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

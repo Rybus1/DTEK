@@ -537,9 +537,15 @@
 
     // register service worker for PWA / Add to Home Screen support
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(() => {
-        console.log('Service worker registered');
-      }).catch((err) => console.warn('SW registration failed', err));
+      const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      const isSecure = location.protocol === 'https:' || isLocalhost;
+      if (isSecure) {
+        navigator.serviceWorker.register('/sw.js').then(() => {
+          console.log('Service worker registered');
+        }).catch((err) => console.warn('SW registration failed', err));
+      } else {
+        console.log('Service worker not registered: insecure origin', location.protocol, location.hostname);
+      }
     }
 
     // capture beforeinstallprompt to allow custom install UI
@@ -587,8 +593,6 @@
   initUI();
   fetchData();
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js");
-  }
+  // Service worker registration is handled in initUI() when appropriate
 
 })();

@@ -197,7 +197,7 @@ button:hover { border-color: rgba(54, 80, 122, .9) }
 .now-line{position:absolute;background:var(--now);z-index:6;border-radius:2px;box-shadow:0 0 8px rgba(0,0,0,0.35);height:10px}
 .now-indicator{position:absolute;z-index:7;font-size:12px;padding:4px 8px;border-radius:8px;background:var(--card);color:var(--text);border:2px solid var(--now);white-space:nowrap;bottom:-24px}
 
-.raw { margin-top: 12px }
+position:relative; overflow:visible}
 
 pre {
   white-space: pre-wrap;

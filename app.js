@@ -329,9 +329,9 @@
 
     // current-time indicator: position relative to the bar so timeline padding doesn't skew placement
     if (nowOrNull) {
-      const nowIdx = nowOrNull.getHours() * 2 + (nowOrNull.getMinutes() >= 30 ? 1 : 0);
-      if (nowIdx >= 0 && nowIdx < 48) {
-        const posPct = (nowIdx / 48) * 100;
+      const nowIdx = nowOrNull.getHours() * 60 + nowOrNull.getMinutes();
+      if (nowIdx >= 0 && nowIdx < 1440) {
+        const posPct = (nowIdx / 1440) * 100;
         const isVertical = window.matchMedia && window.matchMedia('(max-width:720px)').matches;
 
         const nowLine = document.createElement('div');
@@ -341,7 +341,7 @@
         nowLabel.textContent = `${pad2(nowOrNull.getHours())}:${pad2(nowOrNull.getMinutes())}`;
 
         if (isVertical) {
-          // horizontal line across bar at percentage height
+          // horizontal line across bar at percentage height (position relative to .tl-bar)
           nowLine.style.position = 'absolute';
           nowLine.style.left = '155px';
           nowLine.style.right = 'auto';

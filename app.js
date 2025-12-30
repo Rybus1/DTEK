@@ -327,7 +327,7 @@
       breaks.appendChild(lbl);
     }
 
-    // current-time indicator
+    // current-time indicator: position relative to the bar so timeline padding doesn't skew placement
     if (nowOrNull) {
       const nowIdx = nowOrNull.getHours() * 2 + (nowOrNull.getMinutes() >= 30 ? 1 : 0);
       if (nowIdx >= 0 && nowIdx < 48) {
@@ -336,33 +336,40 @@
 
         const nowLine = document.createElement('div');
         nowLine.className = 'now-line';
-        if (isVertical) {
-          nowLine.style.left = '154px';
-          nowLine.style.right = 'auto';
-          nowLine.style.top = posPct + '%';
-          nowLine.style.height = '2px';
-        } else {
-          nowLine.style.left = posPct + '%';
-          nowLine.style.top = '18px';
-          nowLine.style.bottom = '10px';
-          nowLine.style.width = '2px';
-        }
-
         const nowLabel = document.createElement('div');
         nowLabel.className = 'now-indicator';
-        // show current time at load (HH:MM)
         nowLabel.textContent = `${pad2(nowOrNull.getHours())}:${pad2(nowOrNull.getMinutes())}`;
+
         if (isVertical) {
+          // horizontal line across bar at percentage height
+          nowLine.style.position = 'absolute';
+          nowLine.style.left = '0';
+          nowLine.style.right = '0';
+          nowLine.style.top = posPct + '%';
+          nowLine.style.height = '2px';
+
+          nowLabel.style.position = 'absolute';
           nowLabel.style.left = '165px';
           nowLabel.style.top = posPct + '%';
+          nowLabel.style.bottom = 'auto';
           nowLabel.style.transform = 'translateY(-50%)';
         } else {
+          // vertical line across bar at percentage width
+          nowLine.style.position = 'absolute';
+          nowLine.style.left = posPct + '%';
+          nowLine.style.top = 'auto';
+          nowLine.style.width = '2px';
+          nowLine.style.bottom = '0';
+
+          nowLabel.style.position = 'absolute';
           nowLabel.style.left = posPct + '%';
+          nowLabel.style.top = 'auto';
           nowLabel.style.transform = 'translateX(-50%)';
         }
 
-        wrap.appendChild(nowLine);
-        wrap.appendChild(nowLabel);
+        // append to bar (not wrap) so positions are relative to the bar box
+        bar.appendChild(nowLine);
+        bar.appendChild(nowLabel);
       }
     }
 

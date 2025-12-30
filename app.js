@@ -221,35 +221,81 @@
     const wrap = document.createElement("div");
     wrap.className = "timeline-line";
 
+    // containers: breakpoints (labels above) and bar (segments)
+    const breaks = document.createElement("div");
+    breaks.className = "tl-breaks";
+    const bar = document.createElement("div");
+    bar.className = "tl-bar";
+
     let start = 0;
     let cur = halfList[0] || "unknown";
+    const boundaries = [];
 
     for (let i = 1; i <= halfList.length; i++) {
       const next = halfList[i] || null;
       if (i === halfList.length || next !== cur) {
+        // create segment for [start, i)
         const seg = document.createElement("div");
         seg.className = `segment ${cur}`;
-
         const widthPct = ((i - start) / 48) * 100;
-        seg.style.width = widthPct + "%";
+        seg.style.setProperty("--pct", widthPct + "%");
 
-        // якщо сегмент надто маленький — не малюємо лейбл
-        if ((i - start) <= 2) seg.dataset.short = "1";
+        // show duration inside if at least half-hour blocks >= 2 (>=1 hour)
+        const blocks = i - start;
+          if (blocks <= 2) seg.dataset.short = "1"; // mark tiny segments
+          if (blocks >= 1) {
+          const hours = (blocks / 2);
+          const v = document.createElement("div");
+          v.className = "seg-value";
+          // format hours: show integer or .5
+          v.textContent = (hours % 1 === 0) ? `${hours}г` : `${hours.toFixed(1)}г`;
+          seg.appendChild(v);
+        }
 
-        const label = document.createElement("span");
-        label.className = "seg-label";
-        const h = Math.floor(start / 2);
-        const m = (start % 2) ? "30" : "00";
-        label.textContent = `${pad2(h)}:${m}`;
+        bar.appendChild(seg);
 
-        seg.appendChild(label);
-        wrap.appendChild(seg);
+        // record boundary at this start position (for label)
+        boundaries.push(start);
 
         start = i;
         cur = next || "unknown";
       }
     }
 
+    // add final boundary at end
+    boundaries.push(48);
+
+    // render breakpoint labels at boundaries (skip 0 at left if not needed)
+    for (const b of boundaries) {
+      if (b < 0 || b > 48) continue;
+      // don't show label at end (48) as it's beyond right edge
+      if (b === 48) continue;
+      const lbl = document.createElement("div");
+      lbl.className = "breakpoint";
+      const leftPct = (b / 48) * 100;
+      lbl.style.setProperty("--pos", leftPct + "%");
+      // position differently on narrow screens (vertical layout)
+      const isVertical = window.matchMedia && window.matchMedia('(max-width:720px)').matches;
+      if (isVertical) {
+        lbl.style.top = leftPct + "%";
+        if (leftPct < 5) lbl.style.transform = "translateY(0)";
+        else if (leftPct > 95) lbl.style.transform = "translateY(-100%)";
+        else lbl.style.transform = "translateY(-50%)";
+      } else {
+        lbl.style.left = leftPct + "%";
+        if (leftPct < 5) lbl.style.transform = "translateX(0)";
+        else if (leftPct > 95) lbl.style.transform = "translateX(-100%)";
+        else lbl.style.transform = "translateX(-50%)";
+      }
+
+      const h = Math.floor(b / 2);
+      const m = (b % 2) ? "30" : "00";
+      lbl.textContent = `${pad2(h)}:${m}`;
+      breaks.appendChild(lbl);
+    }
+
+    wrap.appendChild(breaks);
+    wrap.appendChild(bar);
     return wrap;
   }
 

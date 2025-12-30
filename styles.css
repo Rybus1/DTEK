@@ -81,6 +81,10 @@ button {
   font-size: 14px;
 }
 
+#regionSelect {
+  width: 100%;
+}
+
 button { cursor: pointer }
 button:hover { border-color: rgba(54, 80, 122, .9) }
 
@@ -168,46 +172,24 @@ button:hover { border-color: rgba(54, 80, 122, .9) }
 
 /* ===== Новий режим: горизонтальна лінія ===== */
 
-.timeline-line {
-  height: 42px;
-  display: flex;
-  border-radius: 999px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--unknown);
+.timeline-line{
+  position:relative;
+  padding:18px 8px 10px;
 }
 
-.segment {
-  height: 100%;
-  position: relative;
-  flex: 0 0 auto;
-}
+.tl-breaks{position:absolute;left:8px;right:8px;top:0;height:18px;pointer-events:none}
+.breakpoint{position:absolute;top:0;font-size:12px;color:var(--muted);white-space:nowrap}
 
-.segment.on { background: var(--accent) }
-.segment.off { background: var(--off) }
-.segment.unknown { background: var(--unknown) }
+.tl-bar{display:flex;height:40px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.segment{height:100%;display:flex;align-items:center;justify-content:center;position:relative;width:var(--pct)}
+.segment.on{background:linear-gradient(90deg,var(--accent) 0 100%)}
+.segment.off{background:linear-gradient(90deg,var(--off) 0 100%)}
+.segment.unknown{background:linear-gradient(90deg,var(--unknown) 0 100%)}
+.seg-value{font-size:16px;font-weight:600;color:var(--pill-text-dark);padding:0 6px}
+.segment.off .seg-value{color:var(--text)}
 
-.seg-label {
-  position: absolute;
-  left: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .3px;
-  font-variant-numeric: tabular-nums;
-  color: var(--pill-text-dark);
-  opacity: .95;
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
-  text-shadow: 0 1px 0 rgba(255,255,255,.08);
-}
-
-/* Малі сегменти — щоб підпис не ліз у хаос */
-.segment[data-short="1"] .seg-label {
-  display: none;
-}
+/* tiny segments: hide value */
+.segment[data-short="1"] .seg-value{display:none}
 
 .raw { margin-top: 12px }
 
@@ -229,5 +211,13 @@ pre {
 @media(max-width:720px) {
   .vgrid { grid-template-columns: repeat(2, minmax(72px, 1fr)) }
   .pill { height: 32px; font-size: 16px }
-  .timeline-line { height: 40px }
+  .timeline-line { height: auto; padding:12px 8px }
+
+  /* vertical line layout: labels column on the left, bar column on the right */
+  .tl-breaks{position:absolute;left:8px;top:8px;bottom:8px;width:56px;height:auto;pointer-events:none}
+  .breakpoint{position:absolute;left:0;font-size:12px;color:var(--muted);white-space:nowrap;transform:translateY(-50%)}
+
+  .tl-bar{display:flex;flex-direction:column;min-height:400px;width:75px;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-left:72px}
+  .segment{width:100%;height:var(--pct);display:flex;align-items:center;justify-content:center}
+  .seg-value{font-size:14px}
 }

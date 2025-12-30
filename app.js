@@ -343,10 +343,11 @@
         if (isVertical) {
           // horizontal line across bar at percentage height
           nowLine.style.position = 'absolute';
-          nowLine.style.left = '0';
-          nowLine.style.right = '0';
+          nowLine.style.left = '155px';
+          nowLine.style.right = 'auto';
           nowLine.style.top = posPct + '%';
           nowLine.style.height = '2px';
+          nowLine.style.width = '14px';
 
           nowLabel.style.position = 'absolute';
           nowLabel.style.left = '165px';

@@ -7,6 +7,7 @@
   const LS_SHOWRAW = "pet_dtek_showraw";
   const LS_THEME = "pet_dtek_theme";
   const LS_VIEW = "pet_dtek_view"; // "grid" | "line"
+  const LS_MINIMAL = "pet_dtek_minimal"; // "1" | "0"
 
   const elRegion = document.getElementById("regionSelect");
   const elQueue = document.getElementById("queueSelect");
@@ -18,6 +19,8 @@
   const elToggleRaw = document.getElementById("toggleRawBtn");
   const elThemeToggle = document.getElementById("themeToggleBtn");
   const elViewToggle = document.getElementById("viewToggleBtn");
+  const elMinimalToggle = document.getElementById("minimalToggleBtn");
+  const elMinimalFloating = document.getElementById("minimalFloatingBtn");
 
   let lastData = null;
 
@@ -68,6 +71,24 @@
     const v = getViewMode();
     // Показуємо "що буде якщо натиснути"
     elViewToggle.textContent = (v === "grid") ? UA.view_line : UA.view_grid;
+  }
+
+  function getMinimal() {
+    return localStorage.getItem(LS_MINIMAL) === "1";
+  }
+
+  function setMinimal(on) {
+    localStorage.setItem(LS_MINIMAL, on ? "1" : "0");
+    if (on) document.documentElement.setAttribute("data-minimal", "1");
+    else document.documentElement.removeAttribute("data-minimal");
+    if (elMinimalToggle) {
+      elMinimalToggle.textContent = on ? "Повернутися до повного виду" : "Мінімалістичний вид";
+      // keep inline button occupying space but hide visually in minimal mode via CSS
+    }
+    if (elMinimalFloating) {
+      elMinimalFloating.hidden = !on;
+      elMinimalFloating.textContent = on ? "Повернутися до повного виду" : "Повернутися до повного виду";
+    }
   }
 
   function buildHalfLabels() {
@@ -445,6 +466,10 @@
     document.documentElement.setAttribute("data-theme", savedTheme);
     elThemeToggle.textContent = (savedTheme === "light") ? "🌙 Темна тема" : "☀️ Світла тема";
 
+    // minimal init
+    const minimalOn = localStorage.getItem(LS_MINIMAL) === "1";
+    setMinimal(!!minimalOn);
+
     // view init
     syncViewBtn();
 
@@ -476,6 +501,22 @@
       elThemeToggle.textContent = (next === "light") ? "🌙 Темна тема" : "☀️ Світла тема";
       if (lastData) render(lastData);
     });
+
+    if (elMinimalToggle) {
+      elMinimalToggle.addEventListener("click", () => {
+        const next = !getMinimal();
+        setMinimal(next);
+        // re-render may hide/show UI; refresh render
+        if (lastData) render(lastData);
+      });
+    }
+    if (elMinimalFloating) {
+      elMinimalFloating.addEventListener("click", () => {
+        const next = !getMinimal();
+        setMinimal(next);
+        if (lastData) render(lastData);
+      });
+    }
 
     if (elViewToggle) {
       elViewToggle.addEventListener("click", () => {

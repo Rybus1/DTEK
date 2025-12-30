@@ -208,6 +208,39 @@ pre {
   color: var(--muted);
 }
 
+/* Minimalist mode: hide controls and extras, show only timeline and a small toggle */
+/* The toggle is visible by default; when minimal mode is active it becomes a floating restore button. */
+.minimal-toggle{
+  display: inline-block;
+  margin-top: 10px;
+  border-radius:10px;
+  padding:8px 10px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+}
+
+/* floating button should be hidden by default (only shown in minimal mode) */
+.minimal-floating{ display: none }
+
+/* hide common UI inside the card except the timeline and the minimal toggle */
+:root[data-minimal="1"] .card > .row,
+:root[data-minimal="1"] .card > .row.row--between,
+:root[data-minimal="1"] #rawWrap,
+:root[data-minimal="1"] .footer {
+  display: none !important;
+}
+
+/* hide timeline headers and info lines, keep only the bar */
+:root[data-minimal="1"] .timeline .t-head,
+:root[data-minimal="1"] .timeline .muted {
+  display: none !important;
+}
+
+/* in minimal mode: keep inline button occupying space but hide it visually; show floating button at bottom-right */
+:root[data-minimal="1"] #minimalToggleBtn { visibility: hidden; }
+:root[data-minimal="1"] #minimalFloatingBtn { visibility: visible; display: block; margin: 12px auto 0; }
+
 @media(max-width:720px) {
   .vgrid { grid-template-columns: repeat(2, minmax(72px, 1fr)) }
   .pill { height: 32px; font-size: 16px }

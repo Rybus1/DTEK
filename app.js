@@ -534,6 +534,20 @@
       }, 140));
     }
 
+    // register service worker for PWA / Add to Home Screen support
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(() => {
+        console.log('Service worker registered');
+      }).catch((err) => console.warn('SW registration failed', err));
+    }
+
+    // capture beforeinstallprompt to allow custom install UI (optional)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      window.deferredInstallPrompt = e;
+      // The browser may show its own UI; we keep the event for potential custom prompts
+      console.log('beforeinstallprompt captured');
+    });
+
     if (elViewToggle) {
       elViewToggle.addEventListener("click", () => {
         const next = getViewMode() === "grid" ? "line" : "grid";

@@ -325,12 +325,20 @@
       breaks.appendChild(lbl);
     }
 
-    // current-time indicator: position relative to the bar so timeline padding doesn't skew placement
+    const isVertical = window.matchMedia && window.matchMedia('(max-width:720px)').matches;
+    // Позиция в границах бара: left/top через calc с учётом padding .timeline-line (8px/18px или 80px/12px)
+    function barLeft(pct) {
+      return isVertical ? '80px' : `calc(8px + (100% - 16px) * ${pct} / 100)`;
+    }
+    function barTop(pct) {
+      return isVertical ? `calc(12px + (100% - 24px) * ${pct} / 100)` : '18px';
+    }
+
+    // current-time indicator в границах бара
     if (nowOrNull) {
       const nowIdx = nowOrNull.getHours() * 60 + nowOrNull.getMinutes();
       if (nowIdx >= 0 && nowIdx < 1440) {
         const posPct = (nowIdx / 1440) * 100;
-        const isVertical = window.matchMedia && window.matchMedia('(max-width:720px)').matches;
 
         const nowLine = document.createElement('div');
         nowLine.className = 'now-line';
@@ -339,36 +347,33 @@
         nowLabel.textContent = `${pad2(nowOrNull.getHours())}:${pad2(nowOrNull.getMinutes())}`;
 
         if (isVertical) {
-          // horizontal line across bar at percentage height (position relative to .tl-bar)
           nowLine.style.position = 'absolute';
-          nowLine.style.left = '155px';
-          nowLine.style.right = 'auto';
-          nowLine.style.top = posPct + '%';
+          nowLine.style.left = '80px';
+          nowLine.style.width = '75px';
+          nowLine.style.top = barTop(posPct);
           nowLine.style.height = '2px';
-          nowLine.style.width = '14px';
+          nowLine.style.transform = 'translateY(-50%)';
 
           nowLabel.style.position = 'absolute';
-          nowLabel.style.left = '165px';
-          nowLabel.style.top = posPct + '%';
-          nowLabel.style.bottom = 'auto';
+          nowLabel.style.left = '163px';
+          nowLabel.style.top = barTop(posPct);
           nowLabel.style.transform = 'translateY(-50%)';
         } else {
-          // vertical line across bar at percentage width
           nowLine.style.position = 'absolute';
-          nowLine.style.left = posPct + '%';
-          nowLine.style.top = 'auto';
+          nowLine.style.left = barLeft(posPct);
+          nowLine.style.top = '18px';
+          nowLine.style.height = '40px';
           nowLine.style.width = '2px';
-          nowLine.style.bottom = '0';
+          nowLine.style.transform = 'translateX(-50%)';
 
           nowLabel.style.position = 'absolute';
-          nowLabel.style.left = posPct + '%';
-          nowLabel.style.top = 'auto';
+          nowLabel.style.left = barLeft(posPct);
+          nowLabel.style.top = '62px';
           nowLabel.style.transform = 'translateX(-50%)';
         }
 
-        // append to bar (not wrap) so positions are relative to the bar box
-        bar.appendChild(nowLine);
-        bar.appendChild(nowLabel);
+        wrap.appendChild(nowLine);
+        wrap.appendChild(nowLabel);
       }
     }
 

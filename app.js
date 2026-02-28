@@ -585,6 +585,12 @@
       window.addEventListener('resize', debounce(() => {
         if (lastData) render(lastData);
       }, 140));
+      // update now line and "next change" every second
+      setInterval(() => {
+        if (lastData) render(lastData);
+      }, 1000);
+      // refetch from API every minute and update UI
+      setInterval(fetchData, 60000);
     }
 
     // register service worker for PWA / Add to Home Screen support

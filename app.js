@@ -355,11 +355,13 @@
           nowLine.style.width = '75px';
           nowLine.style.top = barTop(posPct);
           nowLine.style.height = '2px';
+          nowLine.style.minHeight = '2px';
           nowLine.style.transform = 'translateY(-50%)';
 
           nowLabel.style.position = 'absolute';
           nowLabel.style.left = '163px';
           nowLabel.style.top = barTop(posPct);
+          nowLabel.style.bottom = 'auto';
           nowLabel.style.transform = 'translateY(-50%)';
         } else {
           nowLine.style.position = 'absolute';

@@ -14,7 +14,11 @@ self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
-  self.skipWaiting();
+  // не викликаємо skipWaiting() тут — тоді при оновленні SW буде "waiting" і з’явиться кнопка "Оновити додаток"
+});
+
+self.addEventListener('message', (evt) => {
+  if (evt.data === 'skipWaiting') self.skipWaiting();
 });
 
 self.addEventListener('activate', (evt) => {

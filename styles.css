@@ -214,6 +214,22 @@ pre {
   color: var(--muted);
 }
 
+.footer-update-btn {
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--now);
+  background: transparent;
+  color: var(--now);
+  cursor: pointer;
+}
+
+.footer-update-btn:hover {
+  background: var(--now);
+  color: var(--card);
+}
+
 /* Minimalist mode: hide controls and extras, show only timeline and a small toggle */
 /* The toggle is visible by default; when minimal mode is active it becomes a floating restore button. */
 .minimal-toggle{

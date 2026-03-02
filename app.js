@@ -1,5 +1,6 @@
 (() => {
   const API_URL = "https://dtek-api.svitlo-proxy.workers.dev/";
+  const APP_VERSION = "1.1";
 
   // localStorage ключі (збереження регіону/групи/RAW/теми/виду)
   const LS_REGION = "pet_dtek_region_cpu";
@@ -22,6 +23,8 @@
   const elMinimalToggle = document.getElementById("minimalToggleBtn");
   const elMinimalFloating = document.getElementById("minimalFloatingBtn");
   const elInstallBtn = document.getElementById("installBtn");
+  const elAppVersion = document.getElementById("appVersion");
+  const elUpdateBtn = document.getElementById("updateBtn");
 
   let lastData = null;
 
@@ -519,6 +522,8 @@
   }
 
   function initUI() {
+    if (elAppVersion) elAppVersion.textContent = APP_VERSION;
+
     const showRaw = localStorage.getItem(LS_SHOWRAW) === "1";
     elRawWrap.hidden = !showRaw;
     elToggleRaw.textContent = showRaw ? UA.hideJson : UA.showJson;
@@ -593,13 +598,41 @@
       setInterval(fetchData, 60000);
     }
 
-    // register service worker for PWA / Add to Home Screen support
+    // register service worker for PWA; show "Update app" when new version is waiting
     if ('serviceWorker' in navigator) {
       const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
       const isSecure = location.protocol === 'https:' || isLocalhost;
       if (isSecure) {
-        navigator.serviceWorker.register('./sw.js').then(() => {
+        navigator.serviceWorker.register('./sw.js').then((registration) => {
+          const showUpdateBtn = () => {
+            if (elUpdateBtn) elUpdateBtn.hidden = false;
+          };
+          if (registration.waiting) {
+            if (navigator.serviceWorker.controller) showUpdateBtn();
+            else registration.waiting.postMessage('skipWaiting');
+          }
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) showUpdateBtn();
+                else newWorker.postMessage('skipWaiting');
+              }
+            });
+          });
+          setInterval(() => registration.update(), 60000);
         }).catch((err) => console.warn('SW registration failed', err));
+
+        const onControllerChange = () => window.location.reload();
+        navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+
+        if (elUpdateBtn) {
+          elUpdateBtn.addEventListener('click', () => {
+            const reg = navigator.serviceWorker.getRegistration();
+            if (reg && reg.waiting) reg.waiting.postMessage('skipWaiting');
+          });
+        }
       } else {
         console.log('Service worker not registered: insecure origin', location.protocol, location.hostname);
       }

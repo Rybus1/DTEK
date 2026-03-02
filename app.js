@@ -1,6 +1,6 @@
 (() => {
   const API_URL = "https://dtek-api.svitlo-proxy.workers.dev/";
-  const APP_VERSION = "1.2";
+  const APP_VERSION = "1.3";
 
   // localStorage ключі (збереження регіону/групи/RAW/теми/виду)
   const LS_REGION = "pet_dtek_region_cpu";
@@ -640,23 +640,27 @@
       }
     }
 
-    // capture beforeinstallprompt to allow custom install UI
+    // beforeinstallprompt не викликається в режимі інкогнито — тому кнопка там не з’являлась.
+    // Показуємо кнопку, якщо не вже не запущені як PWA (standalone); при кліку без prompt — підказка.
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (elInstallBtn && !isStandalone) elInstallBtn.hidden = false;
+
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       window.deferredInstallPrompt = e;
-      console.log('beforeinstallprompt captured');
       if (elInstallBtn) elInstallBtn.hidden = false;
     });
 
-    // click handler for install button
     if (elInstallBtn) {
       elInstallBtn.addEventListener('click', async () => {
         const evt = window.deferredInstallPrompt;
-        if (!evt) return;
+        if (!evt) {
+          alert('Встановлення недоступне в режимі інкогнито. Відкрийте сайт у звичайному вікні.');
+          return;
+        }
         try {
           evt.prompt();
           const choice = await evt.userChoice;
-          console.log('userChoice', choice);
           window.deferredInstallPrompt = null;
           elInstallBtn.hidden = true;
           localStorage.setItem('pet_dtek_install_prompted', '1');

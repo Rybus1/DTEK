@@ -1,6 +1,6 @@
 (() => {
   const API_URL = "https://dtek-api.svitlo-proxy.workers.dev/";
-  const APP_VERSION = "1.1";
+  const APP_VERSION = "1.1.1";
 
   // localStorage ключі (збереження регіону/групи/RAW/теми/виду)
   const LS_REGION = "pet_dtek_region_cpu";
